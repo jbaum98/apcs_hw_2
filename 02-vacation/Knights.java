@@ -2,14 +2,16 @@ import java.io.*;
 import java.util.*;
 
 public class Knights {
-    private String[][] board;
+    public String[][] board;
     private int maxX;
     private int maxY;
 
     private String open="o";
     private String visited="x";
     private boolean solved = false;
+    private boolean animate;
     private int movesLeft;
+    private int digits;
 
     public void delay(int n){
         try {
@@ -17,21 +19,23 @@ public class Knights {
         } catch (InterruptedException e) {}
     }
 
-    public Knights(int maxX, int maxY) {
+    public Knights(int maxX, int maxY, boolean animate) {
         this.maxX = maxX;
         this.maxY = maxY;
-        this.board = new String[maxX][maxY];
+        this.animate = animate;
+        board = new String[maxX][maxY];
         for (int y=0; y < maxY; y++) {
             for (int x=0; x < maxX; x++) {
                 board[x][y] = open;
             }
         }
         movesLeft = maxX*maxY - 1;
+        digits = (int) Math.log10(movesLeft) + 1 + 1; // for padding
     }
 
     public String toString() {
-        //String s = "[2J\n"; // clear the terminal
-        String s = new String();
+        String s = animate ? "[2J\n" : new String(); // clear the terminal
+        //String s = new String();
         for (int y=0; y < maxY; y++) {
             for (int x=0; x < maxX; x++) {
                 s += board[x][y];
@@ -60,22 +64,32 @@ public class Knights {
     }
 
     public void solve(int x, int y) {
-        delay(1000);
-        //System.out.println(this);
+        if (animate) {
+            delay(100);
+            System.out.println(this);
+        }
+
+        // verify valid point
         if (isDeadEnd(x,y)) {
             return;
-        } else if (isSolved()) {
-            solved = true;
         }
 
+        // mark it
         board[x][y] = visited;
 
-        for (int[] move : possibleMoves(x,y)) {
-            solve(move[0], move[1]);
+        if (isSolved()) {
+            solved = true;
+        } else {
+            for (int[] move : possibleMoves(x,y)) {
+                if (!solved) {
+                    solve(move[0], move[1]);
+                }
+            }
         }
 
+        // before we back it up
         if (solved) {
-            board[x][y] = ""+movesLeft;
+            board[x][y] = String.format("%" + digits + "d", movesLeft);
             movesLeft--;
         } else {
             board[x][y] = open;
@@ -95,17 +109,37 @@ public class Knights {
     public boolean isSolved() {
         for (int y=0; y < maxY; y++) {
             for (int x=0; x < maxX; x++) {
-               if (board[x][y].equals(open)) {
-                   return false;
-               }
+                if (board[x][y].equals(open)) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
     public static void main(String[] args) {
-        Knights k = new Knights(5, 5);
-        k.solve(0,0);
-        System.out.println(k);
+        if (args.length < 2) {
+            System.out.println("Usage:\n\tjava Knights <X> <Y> <animate>\n\tjava Knights <X> <Y> <animate> <startX> <startY>");
+        } else {
+            int x = Integer.parseInt(args[0]);
+            int y = Integer.parseInt(args[1]);
+            boolean animate;
+            if (args.length >= 3) {
+                animate = args[2].equals("1");
+            } else {
+                animate = false;
+            }
+            int startX, startY;
+            if (args.length >= 5) {
+                startX = Integer.parseInt(args[3]);
+                startY = Integer.parseInt(args[4]);
+            } else {
+                startX = 0;
+                startY = 0;
+            }
+            Knights k = new Knights(x, y, animate);
+            k.solve(startX,startY);
+            System.out.println(k);
+        }
     }
 }
