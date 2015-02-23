@@ -1,0 +1,3 @@
+[submodule "classcode"]
+	path = classcode
+	url = git@github.com:stuycs-apcs-z/classcode.git
