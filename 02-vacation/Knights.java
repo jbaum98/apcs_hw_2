@@ -8,7 +8,6 @@ public class Knights {
 
     private String open="o";
     private String visited="x";
-    private boolean solved = false;
     private boolean animate;
     private int movesLeft;
     private int digits;
@@ -63,7 +62,7 @@ public class Knights {
         return out;
     }
 
-    public void solve(int x, int y) {
+    public boolean solve(int x, int y) {
         if (animate) {
             delay(100);
             System.out.println(this);
@@ -71,30 +70,31 @@ public class Knights {
 
         // verify valid point
         if (isDeadEnd(x,y)) {
-            return;
+            return false;
         }
 
         // mark it
         board[x][y] = visited;
 
         if (isSolved()) {
-            solved = true;
+            mark(x,y);
+            return true;
         } else {
             for (int[] move : possibleMoves(x,y)) {
-                if (!solved) {
-                    solve(move[0], move[1]);
+                if ( solve(move[0], move[1]) ) {
+                    mark(x,y);
+                    return true;
                 }
             }
         }
 
-        // before we back it up
-        if (solved) {
-            board[x][y] = String.format("%" + digits + "d", movesLeft);
-            movesLeft--;
-        } else {
-            board[x][y] = open;
-        }
-        return;
+        board[x][y] = open;
+        return false;
+    }
+
+    public void mark(int x, int y) {
+        board[x][y] = String.format("%" + digits + "d", movesLeft);
+        movesLeft--;
     }
 
     public boolean isDeadEnd(int x, int y) {
