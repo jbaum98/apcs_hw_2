@@ -86,7 +86,7 @@ public class Knights {
                     return true;
                 }
             }
-            
+
             // none of our moves worked
             board[x][y] = open;
             return false;
