@@ -4,26 +4,25 @@ import java.util.List;
 public class Mergesort {
 
     public List<Integer> merge(List<Integer> a, List<Integer> b) {
-        if (a.size() < b.size()) {
-            return merge(b, a); // ensures that a is always longer than b
-        }
 
         List<Integer> out = new ArrayList<Integer>();
 
-        while (b.size() > 0) {
+        while (a.size() > 0 && b.size() > 0) {
             List<Integer> listWithLowest = a.get(0) < b.get(0) ? a : b;
             out.add(listWithLowest.remove(0));
         }
 
+        List<Integer> survivor = a.size() == 0 ? b : a;
+
         // b is now empty, a has leftover
-        while (a.size() > 0) {
-            out.add(a.remove(0));
+        while (survivor.size() > 0) {
+            out.add(survivor.remove(0));
         }
         return out;
     }
 
     public List<Integer> mergeSort(List<Integer> list) {
-        if (list.size() == 0) {
+        if (list.size() <= 1) {
             return list;
         } else {
             int divider = list.size() / 2;
@@ -36,8 +35,6 @@ public class Mergesort {
             for (; i < list.size(); i++) {
                 back.add(list.get(i));
             }
-            System.out.println(front);
-            System.out.println(back);
             return merge(mergeSort(front), mergeSort(back));
         }
     }
