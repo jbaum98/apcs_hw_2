@@ -5,13 +5,8 @@ import java.util.ArrayList;
 public class Select {
 
     public static int select(int[] list, int rank, int low, int high) {
-        System.out.println("//////////////////////////////////////////");
-        System.out.println("low: " + low);
-        System.out.println("high: " + high);
-
         int pivot_index = (low + high) / 2;
         int pivot = list[pivot_index];
-        System.out.println("pivot: " + pivot);
 
         int[] partitioned = new int[list.length];
 
@@ -23,7 +18,6 @@ public class Select {
         for (int i = high+1; i < list.length; i++) {
             partitioned[i] = list[i];
         }
-        System.out.println("After copy: " + Arrays.toString(partitioned));
 
         // don't want to mutate our inputs
         int low_dest = low;
@@ -38,15 +32,11 @@ public class Select {
                 partitioned[high_dest] = val;
                 high_dest--;
             }
-            System.out.println("partitioned: " + Arrays.toString(partitioned) + ", " + val);
         }
 
         pivot_index = low_dest;
         partitioned[pivot_index] = pivot;
         int pivot_rank = pivot_index + 1; // for clarity
-
-        System.out.println("partitioned: " + Arrays.toString(partitioned));
-        System.out.println("pivot_rank: " + pivot_rank);
 
         if (pivot_rank > rank) {
             return select(partitioned, rank, low, pivot_index-1);
