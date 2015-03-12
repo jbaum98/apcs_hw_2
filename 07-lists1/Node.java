@@ -1,13 +1,13 @@
 public class Node<T> {
     private T data;
-    private Node next;
+    private Node<T> next;
 
     public Node(T data){
         this.data = data;
         next = null;
     }
 
-    public Node(T data, Node next) {
+    public Node(T data, Node<T> next) {
         this.data = data;
         this.next = next;
     }
@@ -20,11 +20,11 @@ public class Node<T> {
         return data;
     }
 
-    public void setNext(Node n){
+    public void setNext(Node<T> n){
         next = n;
     }
 
-    public Node getNext(){
+    public Node<T> getNext(){
         return next;
     }
 
