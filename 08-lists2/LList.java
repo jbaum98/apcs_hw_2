@@ -30,6 +30,19 @@ public class LList<T> {
         }
     }
 
+    public Node<T> remove(int index) {
+        if (index < 0) {
+                throw new IndexOutOfBoundsException(""+index+" is less than 0");
+        } else {
+            Node<T> prev = findNode(index-1);
+            Node<T> target = prev.getNext();
+            if (target == null) throw new IndexOutOfBoundsException(""+index+" is greater than the maximum index, "+index-1);
+            Node<T> next = target.getNext();
+            prev.setNext(next);
+            return target
+        }
+    }
+
     public String toString(){
         String s = "";
         for (Node<T> n = head.getNext(); n != null; n = n.getNext()) {
