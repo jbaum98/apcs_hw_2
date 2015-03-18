@@ -9,9 +9,12 @@ public class  Driver{
         }
         System.out.println(l);
 
-        System.out.println("4: " + l.find(4));
-        l.insert(3, 7);
+        System.out.println("4: " + l.get(4));
+        l.add(3, 7);
         System.out.println("inserted 7 at 3 ");
+        System.out.println(l);
+        l.remove(2);
+        System.out.println("removed element at 2");
         System.out.println(l);
 
     }
