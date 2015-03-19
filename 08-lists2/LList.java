@@ -43,6 +43,16 @@ public class LList<E> {
         }
     }
 
+    public boolean remove(E target) {
+        for (Node<E> n = head; n.getNext() != null; n = n.getNext()) {
+            if (n.getNext().getData().equals(target)) {
+                n.setNext(n.getNext().getNext());
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String toString(){
         String s = "";
         for (Node<E> n = head.getNext(); n != null; n = n.getNext()) {

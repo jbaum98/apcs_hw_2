@@ -17,5 +17,8 @@ public class  Driver{
         System.out.println("removed element at 2");
         System.out.println(l);
 
+        l.remove(new Integer(7));
+        System.out.println("removed the 7");
+        System.out.println(l);
     }
 }
