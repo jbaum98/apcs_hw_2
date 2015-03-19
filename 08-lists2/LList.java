@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 public class LList<E> {
     private final Node<E> head = new Node<E>(null);
 
@@ -61,4 +63,26 @@ public class LList<E> {
         s = s + "null";
         return s;
     }
+
+    public Iterator<E> listIterator() {
+    }
+}
+
+class LLit<E> implements Iterator<E> {
+    private Node<E> nextNode;
+
+    public LLit(Node<E> n) {
+        nextNode = n;
+    }
+
+    public boolean hasNext() {
+        return nextNode != null;
+    }
+
+    public E next() {
+        E data = nextNode.getData();
+        nextNode = nextNode.getNext();
+        return data;
+    }
+
 }
