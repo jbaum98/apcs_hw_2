@@ -1,6 +1,7 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class LList<E> {
+public class LList<E> implements Iterable {
     private final Node<E> head = new Node<E>(null);
 
     public E get(int index) {
@@ -64,11 +65,14 @@ public class LList<E> {
         return s;
     }
 
-    public Iterator<E> listIterator() {
+    public Iterator<E> iterator() {
+        return new LLit<E>(head.getNext());
     }
 }
 
 class LLit<E> implements Iterator<E> {
+    private Node<E> currentNode = null; // the last node we gave
+    private Node<E> prevNode = null;
     private Node<E> nextNode;
 
     public LLit(Node<E> n) {
@@ -80,9 +84,22 @@ class LLit<E> implements Iterator<E> {
     }
 
     public E next() {
-        E data = nextNode.getData();
-        nextNode = nextNode.getNext();
-        return data;
+        if (hasNext()) {
+            E data = nextNode.getData();
+            prevNode = currentNode;
+            currentNode = nextNode;
+            nextNode = nextNode.getNext();
+            return data;
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
+    public void remove() {
+        if (currentNode == null) {
+            throw new IllegalStateException();
+        } else {
+            prevNode.setNext(nextNode);
+        }
+    }
 }

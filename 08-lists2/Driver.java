@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Iterator;
 
 public class  Driver{
     public static void main(String[] args) {
@@ -20,5 +21,19 @@ public class  Driver{
         l.remove(new Integer(7));
         System.out.println("removed the 7");
         System.out.println(l);
+
+        System.out.println("TIME TO TEST THE ITERATOR!!!!!!!!!!!!!!!!");
+
+        int n = l.get(2);
+        Iterator<Integer> it = l.iterator();
+        while (it.hasNext()) {
+            int i = it.next();
+            System.out.println("got me a "+i);
+            if (i == n) {
+                it.remove();
+                System.out.println("killed me a "+n);
+            }
+        }
+        System.out.println("I hate "+n+"s:\n\t"+l);
     }
 }
