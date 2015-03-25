@@ -1,3 +1,5 @@
+import java.util.EmptyStackException;
+
 public class MyStackArray<E> implements MyStack<E> {
     private final int chunk;
     private Object[] a;
@@ -25,7 +27,10 @@ public class MyStackArray<E> implements MyStack<E> {
     }
 
     public E pop() {
-        return get(size-- - 1);
+        if (empty()) {
+            throw new EmptyStackException();
+        }
+        return a(size-- - 1);
     }
 
     public boolean empty() {
@@ -33,11 +38,14 @@ public class MyStackArray<E> implements MyStack<E> {
     }
 
     public E top() {
-        return get(size-1);
+        if (empty()) {
+            throw new EmptyStackException();
+        }
+        return a(size-1);
     }
 
     @SuppressWarnings("unchecked")
-    private E get(int index) {
+    private E a(int index) {
         return (E) a[index];
     }
 

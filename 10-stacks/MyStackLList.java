@@ -1,3 +1,5 @@
+import java.util.EmptyStackException;
+
 public class MyStackLList<E> implements MyStack<E> {
     Node<E> top = null;
 
@@ -6,6 +8,9 @@ public class MyStackLList<E> implements MyStack<E> {
     }
 
     public E pop() {
+        if (empty()) {
+            throw new EmptyStackException();
+        }
         E oldTop = top.getData();
         top = top.getNext();
         return oldTop;
@@ -16,6 +21,9 @@ public class MyStackLList<E> implements MyStack<E> {
     }
 
     public E top() {
+        if (empty()) {
+            throw new EmptyStackException();
+        }
         return top.getData();
     }
 
