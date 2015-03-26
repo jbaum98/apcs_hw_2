@@ -43,9 +43,9 @@ public class MyLinkedQueue<E> implements MyQueue<E> {
     public String toString() {
         String out = "tail | ";
         for(Node<E> n = tail; n != null; n = n.getNext()) {
-            out += n.getData() + "  ";
+            out += n.getData() + " ";
         }
-        return out + " | head";
+        return out + "| head";
     }
 }
 
