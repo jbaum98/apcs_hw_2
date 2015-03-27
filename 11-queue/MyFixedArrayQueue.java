@@ -1,27 +1,22 @@
-public class MyDynamicArrayQueue<E> implements MyQueue<E> {
+public class MyFixedArrayQueue<E> implements MyQueue<E> {
     private int front;
     private int back;
-    private int chunk;
     private Object[] a;
 
-    public MyDynamicArrayQueue(int chunk) {
-        this.chunk = chunk;
-        a = new Object[chunk];
-        front = chunk;
-        back = chunk;
+    public MyFixedArrayQueue(int maxSize) {
+        a = new Object[maxSize];
+        front = maxSize;
+        back = maxSize;
     }
 
-    public MyDynamicArrayQueue() {
+    public MyFixedArrayQueue() {
         this(100);
     }
 
     public void enqueue(E data) {
-        if (front == 0) {
-            Object[] newA = new Object[back - front + chunk];
-            for (int i = front; i < back; i++) {
-                newA[i - front + chunk]  = a[i];
-            }
-        }
+       if (full()) {
+           throw new IllegalStateException();
+       }
         a[--front] = data;
     }
 
@@ -33,12 +28,16 @@ public class MyDynamicArrayQueue<E> implements MyQueue<E> {
         return size() == 0;
     }
 
+    public boolean full() {
+        return size() == a.length;
+    }
+
     public E head() {
         return a(front);
     }
 
     public int size() {
-        return back - front;
+        return front - back;
     }
 
     @SuppressWarnings("unchecked")
