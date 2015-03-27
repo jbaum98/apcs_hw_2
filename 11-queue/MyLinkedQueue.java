@@ -21,6 +21,7 @@ public class MyLinkedQueue<E> implements MyQueue<E> {
         }
         E out = tail.getData();
         tail = tail.getNext();
+        if (start == null) end = null;
         return out;
     }
 
