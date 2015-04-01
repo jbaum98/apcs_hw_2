@@ -1,28 +1,28 @@
 import java.util.NoSuchElementException;
 import java.util.Random;
 
-public class Q<E> {
+public class Q<E> implements Storage<E> {
     private Node<E> head = null;
     private Node<E> tail = null;
 
-    public void enqueue(E data){
+    public void put(E data){
         Node<E> node = new Node<E>(data);
         if (empty()) {
             head = node;
-            tail = head;
+            tail = node;
         } else {
+            if (contains(data)) return; // guarantee uniqueness
             head.setNext(node);
             head = node;
         }
     }
 
-    public E dequeue() {
-        if (empty()) {
-            throw new NoSuchElementException();
-        }
+    public E take() {
+        if (empty()) throw new NoSuchElementException();
+
         E out = tail.getData();
         tail = tail.getNext();
-        if (head == null) tail = null;
+        if (tail == null) head = null;
         return out;
     }
 
@@ -30,16 +30,11 @@ public class Q<E> {
         return head == null;
     }
 
-    public E head() {
-        return head.getData();
-    }
-
-    public int size() {
-        int size = 0;
+    private boolean contains(E data) {
         for(Node<E> n = tail; n != null; n = n.getNext()) {
-            size++;
+            if (data.equals(n.getData())) return true;
         }
-        return size;
+        return false;
     }
 
     public String toString() {
@@ -53,13 +48,22 @@ public class Q<E> {
     public static void main(String[] args) {
         Q<Integer> weinerdog = new Q<Integer>();
         Random r = new Random();
-        for(int i = 0; i < 100; i++) {
-            weinerdog.enqueue(r.nextInt(100));
+        int n = r.nextInt(100);
+        weinerdog.put(n);
+        for(int i = 0; i < 5; i++) {
+            weinerdog.put(r.nextInt(100));
+        }
+        weinerdog.put(n);
+        System.out.println(weinerdog);
+        System.out.println(weinerdog.take());
+
+        /*for(int i = 0; i < 100; i++) {
+          weinerdog.put(r.nextInt(100));
         }
         System.out.println(weinerdog);
         for(int i = 0; i < 100; i++) {
-            System.out.println(weinerdog.dequeue());
-        }
+        System.out.println(weinerdog.take());
+        }*/
     }
 }
 
