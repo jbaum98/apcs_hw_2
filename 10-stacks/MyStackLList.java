@@ -29,7 +29,7 @@ public class MyStackLList<E> implements MyStack<E> {
 
     public String toString() {
         String out = new String();
-        for(Node<E> n = top; n.getNext() != null; n = n.getNext()) {
+        for(Node<E> n = top; n != null; n = n.getNext()) {
             out += n.getData() + "----> ";
         }
         out += "null";
