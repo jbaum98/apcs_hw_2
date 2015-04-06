@@ -1,7 +1,7 @@
-import java.io.*;
-import java.util.*;
+import java.util.Scanner;
+import java.io.File;
 
-public class Maze {
+public class MazeQ {
     private char[][] board;
 
     private char path   = '#';
@@ -9,8 +9,9 @@ public class Maze {
     private char me     = 'J';
     private char tracks = '.';
     private char exit   = '$';
+    protected Storage<Point> q;
 
-    public Maze() {
+    public MazeQ() {
         board = new char[40][20];
 
         try {
@@ -27,19 +28,24 @@ public class Maze {
             }
         }
         catch (Exception e) {}
+
+        q = new Q<Point>();
     }
 
     public boolean solve(int startX, int startY) {
-        Storage<Point> q = new Q<Point>();
-        q.put(new Point(startX,startY));
+        q.put(new Point(startX,startY,null));
 
         while (! q.empty()) {
             Point current = q.take();
-            delay(1000);
-            setCharAt(current, me);
+            delay(100);
+            System.out.println(charAt(current));
             System.out.print(this);
             System.out.println(q);
             if (isExit(current)) {
+                System.out.println("done");
+                for (Point p = current; p != null; p = p.previous) {
+                    setCharAt(p,'%');
+                }
                 return true;
             } else {
                 setCharAt(current, tracks);
@@ -58,7 +64,7 @@ public class Maze {
             x <  board.length    &&
             0 <= y               &&
             y <  board[0].length &&
-            board[x][y] == path;
+            (board[x][y] == path || board[x][y] == exit);
     }
 
     public char charAt(Point p) {
@@ -92,67 +98,9 @@ public class Maze {
     }
 
     public static void main(String[] args){
-        Maze m = new Maze();
-        System.out.println(m);
+        MazeQ m = new MazeQ();
+        //System.out.println(m);
         m.solve(1,1);
         System.out.println(m);
-    }
-}
-
-class Point {
-    public final int x;
-    public final int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public Point[] neighbors(Maze m) {
-        int[][] positions = {
-            { x+1, y   },
-            { x-1, y   },
-            { x  , y+1 },
-            { x  , y-1 }
-        };
-
-        Point[] out = new Point[4];
-
-        for (int i = 0; i < positions.length; i++) {
-            int x = positions[i][0];
-            int y = positions[i][1];
-            if (m.isValid(x,y)) {
-                out[i] = new Point(x,y);
-            }
-        }
-        return out;
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof Point) {
-            Point otherPoint = (Point) o;
-            return this.x == otherPoint.x && this.y == otherPoint.y;
-        } else {
-            return false;
-        }
-    }
-
-    public String toString() {
-        return "("+x+","+y+")";
-    }
-
-    public static void main(String[] args) {
-        Random r = new Random();
-        int x = r.nextInt(10);
-        int y = r.nextInt(10);
-        Point p1 = new Point(x,y);
-        Point p2 = new Point(x,y);
-        System.out.println(p1.equals(p2));
-        System.out.println(p2.equals(p1));
-
-        Storage<Point> q = new Q<Point>();
-        q.put(p1);
-        q.put(p2);
-        System.out.println(q);
     }
 }
