@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.io.File;
 
-public class MazeQ {
+public class Maze {
     private char[][] board;
 
     private char path   = '#';
@@ -9,9 +9,10 @@ public class MazeQ {
     private char me     = 'J';
     private char tracks = '.';
     private char exit   = '$';
-    protected Storage<Point> q;
+    private char trace  = '%';
+    private Storage<Point> q;
 
-    public MazeQ() {
+    public Maze() {
         board = new char[40][20];
 
         try {
@@ -28,11 +29,9 @@ public class MazeQ {
             }
         }
         catch (Exception e) {}
-
-        q = new Q<Point>();
     }
 
-    public boolean solve(int startX, int startY) {
+    private boolean solve(Storage<Point> q, int startX, int startY) {
         q.put(new Point(startX,startY,null));
 
         while (! q.empty()) {
@@ -43,8 +42,8 @@ public class MazeQ {
             System.out.println(q);
             if (isExit(current)) {
                 System.out.println("done");
-                for (Point p = current; p != null; p = p.previous) {
-                    setCharAt(p,'%');
+                for (Point p = current.previous; p != null; p = p.previous) {
+                    setCharAt(p,trace);
                 }
                 return true;
             } else {
@@ -57,6 +56,8 @@ public class MazeQ {
         return false;
     }
 
+    public boolean breadth(int x, int y) { return solve(new Q<Point>(),     x, y); }
+    public boolean depth  (int x, int y) { return solve(new Stack<Point>(), x, y); }
 
     public boolean isValid(int x, int y) {
         return
@@ -79,10 +80,22 @@ public class MazeQ {
         return charAt(p) == exit;
     }
 
-    public void delay(int n){
+    public static void delay(int n){
         try {
             Thread.sleep(n);
         } catch (Exception e) {}
+    }
+
+    public void reset() {
+        for (int y=0; y < board[0].length; y++)
+        {
+            for (int x=0; x < board.length; x++) {
+                char c = board[x][y];
+                if (c == me || c == tracks || c == trace) {
+                    board[x][y] = path;
+                }
+            }
+        }
     }
 
     public String toString() {
@@ -98,9 +111,14 @@ public class MazeQ {
     }
 
     public static void main(String[] args){
-        MazeQ m = new MazeQ();
+        Maze m = new Maze();
         //System.out.println(m);
-        m.solve(1,1);
+        m.breadth(1,1);
+        System.out.println(m);
+        System.out.println("////////////////////////////////////////////////////////////");
+        delay(3000);
+        m.reset();
+        m.depth(1,1);
         System.out.println(m);
     }
 }

@@ -12,7 +12,7 @@ public class Point {
         this.previous = previous;
     }
 
-    public Point[] neighbors(MazeQ m) {
+    public Point[] neighbors(Maze m) {
         int[][] positions = {
             { x+1, y   },
             { x-1, y   },
