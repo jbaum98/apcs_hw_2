@@ -1,4 +1,3 @@
-
 import java.util.Random;
 
 public class Point {
@@ -11,6 +10,8 @@ public class Point {
         this.y = y;
         this.previous = previous;
     }
+
+    public Point(int x, int y) { this(x,y,null); }
 
     public Point[] neighbors(Maze m) {
         int[][] positions = {

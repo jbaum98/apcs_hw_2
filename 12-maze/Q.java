@@ -5,41 +5,46 @@ public class Q<E> implements Storage<E> {
     private Node<E> head = null;
     private Node<E> tail = null;
 
-    public void put(E data){
-        Node<E> node = new Node<E>(data);
+    public void put(E data) {
+        Node<E> newNode = new Node<E>(data);
         if (empty()) {
-            head = node;
-            tail = node;
+            setHead(newNode);
+            setTail(newNode);
         } else {
             if (contains(data)) return; // guarantee uniqueness
-            head.setNext(node);
-            head = node;
+            getHead().setNext(newNode);
+            setHead(newNode);
         }
     }
 
     public E take() {
         if (empty()) throw new NoSuchElementException();
 
-        E out = tail.getData();
-        tail = tail.getNext();
-        if (tail == null) head = null;
+        E out = getTail().getData();
+        setTail(getTail().getNext());
+        if (getTail() == null) setHead(null);
         return out;
     }
 
     public boolean empty() {
-        return head == null;
+        return getHead() == null;
     }
 
     private boolean contains(E data) {
-        for(Node<E> n = tail; n != null; n = n.getNext()) {
+        for(Node<E> n = getTail(); n != null; n = n.getNext()) {
             if (data.equals(n.getData())) return true;
         }
         return false;
     }
 
+    protected Node<E> getHead() { return head; }
+    protected void setHead(Node<E> h) { head = h; }
+    protected Node<E> getTail() { return tail; }
+    protected void setTail(Node<E> t) { tail = t; }
+
     public String toString() {
         String out = "tail | ";
-        for(Node<E> n = tail; n != null; n = n.getNext()) {
+        for(Node<E> n = getTail(); n != null; n = n.getNext()) {
             out += n.getData() + " ";
         }
         return out + "| head";
@@ -56,6 +61,7 @@ public class Q<E> implements Storage<E> {
         weinerdog.put(n);
         System.out.println(weinerdog);
         System.out.println(weinerdog.take());
+        System.out.println(weinerdog);
 
         /*for(int i = 0; i < 100; i++) {
           weinerdog.put(r.nextInt(100));
