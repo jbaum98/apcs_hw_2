@@ -1,51 +1,48 @@
 import java.util.Random;
 
-public class PQ<E extends HasPriority> extends Q<E> implements Storage<E> {
-    private PNode<E> head = null;
-    private PNode<E> tail = null;
+public class PriorityQ<E extends HasPriority> extends AbstractQ<PriorityNode<E>, E> {
 
-    public void put(E data) {
-        PNode<E> newNode = new PNode<E>(data, data.getPriority());
+    public PriorityNode<E> newNode(E data) {
+        return new PriorityNode<E>(data, data.getPriority());
+    }
+
+    @Override public void put(E data) {
+        PriorityNode<E> newNode = new PriorityNode<E>(data, data.getPriority());
         if (empty()) {
-            setHead(newNode);
-            setTail(newNode);
+            head = newNode;
+            tail = newNode;
         } else {
-            PNode<E> n = getTail();
-            PNode<E> behind = null;;
-            while ( n != null  && n.getPriority() > newNode.getPriority() ) {
+            PriorityNode<E> n = tail;
+            PriorityNode<E> behind = null;;
+            while ( n != null  && n.getPriority() < newNode.getPriority() ) {
                 if (n.getData().equals(newNode.getData())) return; // ensure uniqueness
                 behind = n;
                 n = n.getNext();
             }
-            // now n is the first node whose priority is less than our new node
+            // now n is the first node whose priority is higher than our new node
             // and behind is the node behind that
-            PNode<E> firstLess = n;
+            PriorityNode<E> firstHigher = n;
             // keep going to ensure uniqueness
             while (n != null) {
                 if (n.getData().equals(newNode.getData())) return; // ensure uniqueness
                 n = n.getNext();
             }
 
-            if (firstLess == null) { // this is the lowest
-                getHead().setNext(newNode);
-                setHead(newNode);
-            } else if (behind == null) { // this is the highest
-                newNode.setNext(firstLess);
-                setTail(newNode);
+            if (firstHigher == null) { // this is the highest
+                head.setNext(newNode);
+                head = newNode;
+            } else if (behind == null) { // this is the lowest
+                newNode.setNext(firstHigher);
+                tail = newNode;
             } else {
-                newNode.setNext(firstLess);
+                newNode.setNext(firstHigher);
                 behind.setNext(newNode);
             }
         }
     }
 
-    @Override protected PNode<E> getHead() { return head; }
-    @Override protected void setHead(Node<E> h) { head = (PNode) h; }
-    @Override protected PNode<E> getTail() { return tail; }
-    @Override protected void setTail(Node<E> t) { tail = (PNode) t; }
-
     public static void main(String[] args) {
-        PQ<PInteger> weinerdog = new PQ<PInteger>();
+        PriorityQ<PInteger> weinerdog = new PriorityQ<PInteger>();
         Random r = new Random();
         PInteger n = new PInteger(r.nextInt(100));
         weinerdog.put(n);

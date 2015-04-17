@@ -1,39 +1,43 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
+import java.io.IOException;
 
 public class Maze {
-    private char[][] board;
+    private final char[][] board;
 
-    private char path   = '#';
-    private char wall   = ' ';
-    private char me     = 'J';
-    private char tracks = '.';
-    private char exit   = '$';
-    private char trace  = '%';
+    private final char path   = '#';
+    private final char wall   = ' ';
+    private final char me     = 'J';
+    private final char tracks = '.';
+    private final char exit   = '$';
+    private final char trace  = '%';
     public final Point exitPoint;
 
     public Maze() {
-        board = new char[40][20];
-
+        List<char[]> b = new ArrayList<char[]>();
         try {
             Scanner sc = new Scanner(new File("maze.dat"));
-            int j=0;
-            while (sc.hasNext())
-            {
+            while (sc.hasNext()) {
                 String line = sc.nextLine();
-                for (int i=0;i<board.length;i++)
-                {
-                    board[i][j] = line.charAt(i);
+                char[] l = new char[line.length()];
+                for (int i=0; i < line.length(); i++) {
+                    l[i] = line.charAt(i);
                 }
-                j++;
+                b.add(l);
             }
         }
-        catch (Exception e) {}
-        exitPoint = breadth(1,1);
+        catch (IOException e) {
+            System.out.println("Error parsing maze.dat");
+            System.exit(1);
+        }
+        board = b.toArray(new char[0][0]);
+        exitPoint = breadth(0,0);
         reset();
     }
 
-    private <P extends Point> P solve(Storage<P> q, boolean display) {
+    private <P extends AbstractPoint<P>> P solve(Storage<P> q, boolean display) {
         while (! q.empty()) {
             P current = q.take();
             if (display) printStat(q);
@@ -41,8 +45,8 @@ public class Maze {
                 if (display) retrievePath(current);
                 return current;
             } else {
-                setCharAt(current, tracks);
-                for (P p : (P[]) current.neighbors(this)) {
+                if (display) setCharAt(current, tracks);
+                for (P p : current.neighbors(this)) {
                     if (p != null) q.put(p);
                 }
             }
@@ -56,8 +60,8 @@ public class Maze {
         System.out.println(q);
     }
 
-    public void retrievePath(Point exit) {
-        for (Point p = exit.previous; p != null; p = p.previous) {
+    public void retrievePath(AbstractPoint exit) {
+        for (AbstractPoint p = exit.previous; p != null; p = p.previous) {
             setCharAt(p,trace);
         }
     }
@@ -76,12 +80,12 @@ public class Maze {
     }
     public Point depth(int x, int y) { return depth(x,y,false); }
 
-    public Point best(int x, int y, boolean display) {
-        Storage<PPoint> q = new PQ<PPoint>();
-        q.put(new PPoint(x,y,calculatePriority(x,y)));
+    public PriorityPoint best(int x, int y, boolean display) {
+        Storage<PriorityPoint> q = new PriorityQ<PriorityPoint>();
+        q.put(new PriorityPoint(x,y,calculatePriority(x,y)));
         return solve(q, display);
     }
-    public Point best(int x, int y) { return best(x,y,false); }
+    public PriorityPoint best(int x, int y) { return best(x,y,false); }
 
     public boolean isValid(int x, int y) {
         return
@@ -92,32 +96,24 @@ public class Maze {
             (board[x][y] == path || board[x][y] == exit);
     }
 
-    public char charAt(Point p) {
+    public char charAt(AbstractPoint p) {
         return board[p.x][p.y];
     }
 
-    public void setCharAt(Point p, char c) {
+    public void setCharAt(AbstractPoint p, char c) {
         board[p.x][p.y] = c;
     }
 
-    public boolean isExit(Point p) {
+    public boolean isExit(AbstractPoint p) {
         return charAt(p) == exit;
     }
 
     public int calculatePriority(int x, int y) {
-        return EuclideanDistance(x,y);
+        return Geometry.EuclideanDistance(x,y, exitPoint.x, exitPoint.y);
     }
 
     public int calculatePriority(Point p) {
         return calculatePriority(p.x, p.y);
-    }
-
-    private int EuclideanDistance(int x, int y) {
-        int dx = exitPoint.x - x;
-        if (dx < 0) dx = -dx;
-        int dy = exitPoint.y - y;
-        if (dy < 0) dy = -dy;
-        return dx*dx + dy*dy;
     }
 
     public static void delay(int n){
@@ -159,8 +155,9 @@ public class Maze {
         //delay(3000);
         //m.reset();
         //m.depth(1,1);
-        m.best(1,1,true);
-        System.out.println(m);
-        System.out.println(m.exitPoint);
+        m.best(0,0,true);
+        //m.setCharAt(new Point(1, 1), 'J');
+        //System.out.println(m);
+        //System.out.println(m.exitPoint);
     }
 }

@@ -1,53 +1,17 @@
 import java.util.Random;
 
-public class Point {
-    public final int x;
-    public final int y;
-    public final Point previous;
-
+public class Point extends AbstractPoint<Point> {
     public Point(int x, int y, Point previous) {
-        this.x = x;
-        this.y = y;
-        this.previous = previous;
+        super(x,y,previous);
     }
 
-    public Point(int x, int y) { this(x,y,null); }
+    public Point(int x, int y) { super(x,y); }
 
-    public Point[] neighbors(Maze m) {
-        int[][] positions = {
-            { x+1, y   },
-            { x-1, y   },
-            { x  , y+1 },
-            { x  , y-1 }
-        };
-
-        Point[] out = new Point[4];
-
-        for (int i = 0; i < positions.length; i++) {
-            int x = positions[i][0];
-            int y = positions[i][1];
-            if (m.isValid(x,y)) {
-                out[i] = new Point(x,y,this);
-            }
-        }
-        return out;
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof Point) {
-            Point otherPoint = (Point) o;
-            return this.x == otherPoint.x && this.y == otherPoint.y;
-        } else {
-            return false;
-        }
-    }
-
-    public String toString() {
-        return "("+x+","+y+")";
-    }
+    protected Point[] blankArray(int length) { return new Point[length]; }
+    protected Point newNeighbor(int x, int y, Maze m) { return new Point(x,y,this); }
 
     public static void main(String[] args) {
-        Random r = new Random();
+        /*Random r = new Random();
         int x = r.nextInt(10);
         int y = r.nextInt(10);
         Point p1 = new Point(x,y,null);
@@ -58,6 +22,6 @@ public class Point {
         Storage<Point> q = new Q<Point>();
         q.put(p1);
         q.put(p2);
-        System.out.println(q);
+        System.out.println(q);*/
     }
 }
