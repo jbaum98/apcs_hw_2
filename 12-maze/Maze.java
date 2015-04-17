@@ -59,9 +59,9 @@ public class Maze {
     }
 
     public void printStat(Storage q) {
-        delay(100);
+        delay(10);
         System.out.print(this);
-        System.out.println(q);
+        //System.out.println(q);
     }
 
     public void retrievePath(Point exit) {
@@ -90,6 +90,13 @@ public class Maze {
         return solve(q, display);
     }
     public Point best(int x, int y) { return best(x,y,false); }
+
+    public Point astar(int x, int y, boolean display) {
+        Storage<Point> q = new PriorityQ<Point>(new AStar<Point>(new EuclideanPrioritizer(exitPoint)));
+        q.put(new Point(x,y));
+        return solve(q, display);
+    }
+    public Point astar(int x, int y) { return astar(x,y,false); }
 
     public boolean isValid(int x, int y) {
         return

@@ -1,17 +1,27 @@
 package maze;
 
-public class Point {
+import maze.prioritizers.Costly;
+
+public class Point implements Costly {
     public final int x;
     public final int y;
+    private final int cost;
     public final Point previous;
 
     public Point(int x, int y, Point previous) {
         this.x = x;
         this.y = y;
         this.previous = previous;
+        if (previous == null) {
+            cost = 0;
+        } else {
+            this.cost = previous.cost + 1;
+        }
     }
 
     public Point(int x, int y) { this(x,y,null); }
+
+    public int cost() { return cost; }
 
     public Point[] neighbors(Maze m) {
         int[][] positions = {
@@ -27,7 +37,7 @@ public class Point {
             int x = positions[i][0];
             int y = positions[i][1];
             if (m.isValid(x,y)) {
-                out[i] = new Point(x,y);
+                out[i] = new Point(x,y,this);
             }
         }
         return out;
