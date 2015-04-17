@@ -1,3 +1,5 @@
+package maze.storage;
+
 import java.util.Random;
 
 public class PriorityQ<E extends HasPriority> extends AbstractQ<PriorityNode<E>, E> {

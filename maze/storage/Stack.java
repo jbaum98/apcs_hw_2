@@ -1,3 +1,5 @@
+package maze.storage;
+
 import java.util.EmptyStackException;
 
 public class Stack<E> implements Storage<E> {

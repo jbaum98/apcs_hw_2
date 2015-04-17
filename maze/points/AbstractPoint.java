@@ -1,3 +1,7 @@
+package maze.points;
+
+import maze.Maze;
+
 public abstract class AbstractPoint<P extends AbstractPoint<P>> {
     public final int x;
     public final int y;
@@ -11,7 +15,7 @@ public abstract class AbstractPoint<P extends AbstractPoint<P>> {
 
     public AbstractPoint(int x, int y) { this(x,y,null); }
 
-    protected P[] neighbors(Maze m) {
+    public P[] neighbors(Maze m) {
         int[][] positions = {
             { x+1, y   },
             { x-1, y   },

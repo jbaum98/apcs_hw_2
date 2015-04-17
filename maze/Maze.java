@@ -1,8 +1,12 @@
+package maze;
+
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
+import maze.points.*;
+import maze.storage.*;
 
 public class Maze {
     private final char[][] board;
@@ -15,10 +19,10 @@ public class Maze {
     private final char trace  = '%';
     public final Point exitPoint;
 
-    public Maze() {
+    public Maze(File file) {
         List<char[]> b = new ArrayList<char[]>();
         try {
-            Scanner sc = new Scanner(new File("maze.dat"));
+            Scanner sc = new Scanner(file);
             while (sc.hasNext()) {
                 String line = sc.nextLine();
                 char[] l = new char[line.length()];
@@ -29,7 +33,7 @@ public class Maze {
             }
         }
         catch (IOException e) {
-            System.out.println("Error parsing maze.dat");
+            System.out.println("Error parsing maze file");
             System.exit(1);
         }
         board = b.toArray(new char[0][0]);
@@ -144,20 +148,5 @@ public class Maze {
             s+='\n';
         }
         return s;
-    }
-
-    public static void main(String[] args){
-        Maze m = new Maze();
-        //System.out.println(m);
-        //m.breadth(1,1);
-        //System.out.println(m);
-        //System.out.println("////////////////////////////////////////////////////////////");
-        //delay(3000);
-        //m.reset();
-        //m.depth(1,1);
-        m.best(0,0,true);
-        //m.setCharAt(new Point(1, 1), 'J');
-        //System.out.println(m);
-        //System.out.println(m.exitPoint);
     }
 }

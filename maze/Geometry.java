@@ -1,3 +1,5 @@
+package maze;
+
 public abstract class Geometry {
     public static int abs(int n) {
         if (n < 0) {

@@ -1,3 +1,5 @@
+package maze.storage;
+
 public class PriorityNode<E> extends AbstractNode<PriorityNode<E>, E> {
     private final int priority;
 

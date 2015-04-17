@@ -1,4 +1,7 @@
+package maze.points;
+
 import java.util.Random;
+import maze.Maze;
 
 public class Point extends AbstractPoint<Point> {
     public Point(int x, int y, Point previous) {

@@ -1,3 +1,5 @@
+package maze.storage;
+
 import java.util.NoSuchElementException;
 import java.util.Random;
 

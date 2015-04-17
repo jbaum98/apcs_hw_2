@@ -1,3 +1,5 @@
+package maze.storage;
+
 public abstract class AbstractNode<N extends AbstractNode<N,E>, E> {
     private final E data;
     private N next = null;

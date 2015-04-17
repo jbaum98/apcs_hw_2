@@ -1,4 +1,8 @@
+package maze.points;
+
 import java.util.Arrays;
+import maze.storage.HasPriority;
+import maze.Maze;
 
 public class PriorityPoint extends AbstractPoint<PriorityPoint> implements HasPriority {
     private final int priority;
