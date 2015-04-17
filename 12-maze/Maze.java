@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
-import maze.points.*;
 import maze.storage.*;
+import maze.prioritizers.*;
 
 public class Maze {
     private final char[][] board;
@@ -41,16 +41,16 @@ public class Maze {
         reset();
     }
 
-    private <P extends AbstractPoint<P>> P solve(Storage<P> q, boolean display) {
+    private Point solve(Storage<Point> q, boolean display) {
         while (! q.empty()) {
-            P current = q.take();
+            Point current = q.take();
             if (display) printStat(q);
             if (isExit(current)) {
                 if (display) retrievePath(current);
                 return current;
             } else {
                 if (display) setCharAt(current, tracks);
-                for (P p : current.neighbors(this)) {
+                for (Point p : current.neighbors(this)) {
                     if (p != null) q.put(p);
                 }
             }
@@ -64,8 +64,8 @@ public class Maze {
         System.out.println(q);
     }
 
-    public void retrievePath(AbstractPoint exit) {
-        for (AbstractPoint p = exit.previous; p != null; p = p.previous) {
+    public void retrievePath(Point exit) {
+        for (Point p = exit.previous; p != null; p = p.previous) {
             setCharAt(p,trace);
         }
     }
@@ -84,12 +84,12 @@ public class Maze {
     }
     public Point depth(int x, int y) { return depth(x,y,false); }
 
-    public PriorityPoint best(int x, int y, boolean display) {
-        Storage<PriorityPoint> q = new PriorityQ<PriorityPoint>();
-        q.put(new PriorityPoint(x,y,calculatePriority(x,y)));
+    public Point best(int x, int y, boolean display) {
+        Storage<Point> q = new PriorityQ<Point>(new EuclideanPrioritizer(exitPoint));
+        q.put(new Point(x,y));
         return solve(q, display);
     }
-    public PriorityPoint best(int x, int y) { return best(x,y,false); }
+    public Point best(int x, int y) { return best(x,y,false); }
 
     public boolean isValid(int x, int y) {
         return
@@ -100,24 +100,16 @@ public class Maze {
             (board[x][y] == path || board[x][y] == exit);
     }
 
-    public char charAt(AbstractPoint p) {
+    public char charAt(Point p) {
         return board[p.x][p.y];
     }
 
-    public void setCharAt(AbstractPoint p, char c) {
+    public void setCharAt(Point p, char c) {
         board[p.x][p.y] = c;
     }
 
-    public boolean isExit(AbstractPoint p) {
+    public boolean isExit(Point p) {
         return charAt(p) == exit;
-    }
-
-    public int calculatePriority(int x, int y) {
-        return Geometry.EuclideanDistance(x,y, exitPoint.x, exitPoint.y);
-    }
-
-    public int calculatePriority(Point p) {
-        return calculatePriority(p.x, p.y);
     }
 
     public static void delay(int n){

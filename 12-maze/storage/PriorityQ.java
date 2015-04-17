@@ -1,15 +1,21 @@
 package maze.storage;
 
 import java.util.Random;
+import maze.prioritizers.Prioritizer;
 
-public class PriorityQ<E extends HasPriority> extends AbstractQ<PriorityNode<E>, E> {
+public class PriorityQ<E> extends AbstractQ<PriorityNode<E>, E> {
+    private final Prioritizer<E> p;
+
+    public PriorityQ(Prioritizer<E> prioritizer) {
+        p = prioritizer;
+    }
 
     public PriorityNode<E> newNode(E data) {
-        return new PriorityNode<E>(data, data.getPriority());
+        return new PriorityNode<E>(data, p.priority(data));
     }
 
     @Override public void put(E data) {
-        PriorityNode<E> newNode = new PriorityNode<E>(data, data.getPriority());
+        PriorityNode<E> newNode = newNode(data);
         if (empty()) {
             head = newNode;
             tail = newNode;
@@ -44,14 +50,13 @@ public class PriorityQ<E extends HasPriority> extends AbstractQ<PriorityNode<E>,
     }
 
     public static void main(String[] args) {
-        PriorityQ<PInteger> weinerdog = new PriorityQ<PInteger>();
+        Storage<Integer> weinerdog = new PriorityQ<Integer>(new IntegerPrioritizer());
         Random r = new Random();
-        PInteger n = new PInteger(r.nextInt(100));
+        Integer n = r.nextInt(100);
         weinerdog.put(n);
         for(int i = 0; i < 5; i++) {
             System.out.println(weinerdog);
-            PInteger x = new PInteger(r.nextInt(100));
-            weinerdog.put(x);
+            weinerdog.put(r.nextInt(100));
         }
         weinerdog.put(n);
         System.out.println(weinerdog);
@@ -68,27 +73,6 @@ public class PriorityQ<E extends HasPriority> extends AbstractQ<PriorityNode<E>,
     }
 }
 
-class PInteger implements HasPriority {
-    public final int n;
-
-    public PInteger(int n) { this.n = n; }
-
-    public int getPriority() { return n; }
-
-    public String toString() { return ""+n; }
-
-    public boolean equals(Object o) {
-        if (o instanceof PInteger) {
-            PInteger other = (PInteger) o;
-            return this.n == other.n;
-        } else {
-            return false;
-        }
-    }
-
-    public static void main(String[] args) {
-        PInteger a = new PInteger(5);
-        PInteger b = new PInteger(5);
-        System.out.println(a.equals(b));
-    }
+class IntegerPrioritizer implements Prioritizer<Integer> {
+    public int priority(Integer n) { return n; }
 }

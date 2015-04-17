@@ -1,21 +1,19 @@
-package maze.points;
+package maze;
 
-import maze.Maze;
-
-public abstract class AbstractPoint<P extends AbstractPoint<P>> {
+public class Point {
     public final int x;
     public final int y;
-    public final P previous;
+    public final Point previous;
 
-    public AbstractPoint(int x, int y, P previous) {
+    public Point(int x, int y, Point previous) {
         this.x = x;
         this.y = y;
         this.previous = previous;
     }
 
-    public AbstractPoint(int x, int y) { this(x,y,null); }
+    public Point(int x, int y) { this(x,y,null); }
 
-    public P[] neighbors(Maze m) {
+    public Point[] neighbors(Maze m) {
         int[][] positions = {
             { x+1, y   },
             { x-1, y   },
@@ -23,24 +21,21 @@ public abstract class AbstractPoint<P extends AbstractPoint<P>> {
             { x  , y-1 }
         };
 
-        P[] out = blankArray(positions.length);
+        Point[] out = new Point[positions.length];
 
         for (int i = 0; i < positions.length; i++) {
             int x = positions[i][0];
             int y = positions[i][1];
             if (m.isValid(x,y)) {
-                out[i] = newNeighbor(x,y,m);
+                out[i] = new Point(x,y);
             }
         }
         return out;
     }
 
-    protected abstract P[] blankArray(int length);
-    protected abstract P newNeighbor(int x, int y, Maze m);
-
     public boolean equals(Object o) {
-        if (o instanceof AbstractPoint) {
-            AbstractPoint otherPoint = (AbstractPoint) o;
+        if (o instanceof Point) {
+            Point otherPoint = (Point) o;
             return this.x == otherPoint.x && this.y == otherPoint.y;
         } else {
             return false;
@@ -52,8 +47,8 @@ public abstract class AbstractPoint<P extends AbstractPoint<P>> {
     }
 
     public static void main(String[] args) {
-        PriorityPoint p1 = new PriorityPoint(1, 2, 6);
-        PriorityPoint p2 = new PriorityPoint(1, 2, 9);
+        Point p1 = new Point(1, 2);
+        Point p2 = new Point(1, 2);
         System.out.println(p1.equals(p2));
     }
 }
