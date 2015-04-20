@@ -92,7 +92,7 @@ public class Maze {
     public Point best(int x, int y) { return best(x,y,false); }
 
     public Point astar(int x, int y, boolean display) {
-        Storage<Point> q = new PriorityQ<Point>(new AStar<Point>(new EuclideanPrioritizer(exitPoint)));
+        Storage<Point> q = new PriorityQ<Point>(new AStar<Point>(new ManhattanPrioritizer(exitPoint)));
         q.put(new Point(x,y));
         return solve(q, display);
     }
