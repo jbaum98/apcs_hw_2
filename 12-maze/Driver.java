@@ -1,4 +1,4 @@
-package maze;
+package apcs_hw.maze;
 
 import java.io.File;
 

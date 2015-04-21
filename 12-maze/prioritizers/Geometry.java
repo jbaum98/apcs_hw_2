@@ -1,4 +1,4 @@
-package maze.prioritizers;
+package apcs_hw.maze.prioritizers;
 
 public abstract class Geometry {
     public static int abs(int n) {

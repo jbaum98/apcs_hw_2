@@ -1,7 +1,7 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 import java.util.Random;
-import maze.prioritizers.Prioritizer;
+import apcs_hw.maze.prioritizers.Prioritizer;
 
 public class PriorityQ<E> extends AbstractQ<PriorityNode<E>, E> {
     private final Prioritizer<E> p;

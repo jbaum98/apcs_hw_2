@@ -1,6 +1,6 @@
-package maze.prioritizers;
+package apcs_hw.maze.prioritizers;
 
-import maze.Point;
+import apcs_hw.maze.Point;
 
 public class EuclideanPrioritizer implements Prioritizer<Point> {
     private final Point exit;

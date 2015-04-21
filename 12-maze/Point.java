@@ -1,6 +1,6 @@
-package maze;
+package apcs_hw.maze;
 
-import maze.prioritizers.Costly;
+import apcs_hw.maze.prioritizers.Costly;
 
 public class Point implements Costly {
     public final int x;

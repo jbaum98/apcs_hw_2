@@ -1,4 +1,4 @@
-package maze.prioritizers;
+package apcs_hw.maze.prioritizers;
 
 public class AStar<E extends Costly> implements Prioritizer<E> {
     private final Prioritizer<E> p;

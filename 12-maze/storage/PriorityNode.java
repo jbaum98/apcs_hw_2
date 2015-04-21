@@ -1,4 +1,4 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 public class PriorityNode<E> extends AbstractNode<PriorityNode<E>, E> {
     private final int priority;

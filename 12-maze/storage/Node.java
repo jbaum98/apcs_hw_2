@@ -1,4 +1,4 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 public class Node<E> extends AbstractNode<Node<E>, E> {
     public Node(E data) { super(data); }

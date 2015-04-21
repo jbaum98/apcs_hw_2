@@ -1,4 +1,4 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 import java.util.EmptyStackException;
 

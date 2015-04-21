@@ -1,4 +1,4 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 public interface Storage<E> {
     public void put(E data);

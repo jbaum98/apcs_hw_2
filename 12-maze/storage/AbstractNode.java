@@ -1,4 +1,4 @@
-package maze.storage;
+package apcs_hw.maze.storage;
 
 public abstract class AbstractNode<N extends AbstractNode<N,E>, E> {
     private final E data;

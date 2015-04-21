@@ -1,12 +1,12 @@
-package maze;
+package apcs_hw.maze;
 
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
-import maze.storage.*;
-import maze.prioritizers.*;
+import apcs_hw.maze.storage.*;
+import apcs_hw.maze.prioritizers.*;
 
 public class Maze {
     private final char[][] board;
