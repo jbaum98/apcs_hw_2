@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class BinaryTree<E extends Comparable<E>> {
     private Node<E> root;
 
@@ -27,76 +29,37 @@ public class BinaryTree<E extends Comparable<E>> {
         if (root == null) {
             root = new Node<E>(data);
         } else {
-            Node<E> newNode = new Node(data);
+            Node<E> newNode = new Node<E>(data);
             Node<E> n = root;
-            boolean right = false;
+            Node<E> tmp = null;
             while (n != null) {
-                right = n.getData().compareTo(data) < 0;
+                tmp = n;
+                boolean right = n.getData().compareTo(data) < 0;
                 if (right)
                     n = n.getRight();
                 else
                     n = n.getLeft();
             }
+            boolean right = tmp.getData().compareTo(data) < 0;
             if (right)
-                n.setRight(newNode);
+                tmp.setRight(newNode);
             else
-                n.setLeft(newNode);
+                tmp.setLeft(newNode);
 
         }
     }
 
     public String toString() {
-        int[] info = toStringInfo(root);
-        maxString = info[0];
-        maxPath   = info[1];
-        height = maxPath*2 - 1;
-        width = Math.pow(2, maxPath - 1)*(maxString +1) - 1;
-        String[] s = new char[height][width];
-        
-
-    }
-
-    private static char[] populate(char[] chrs, int x, int y) {
-
-    }
-
-    /**
-     * @return an array of two ints, where the first number
-     * is the maximum length of toString and the second number
-     * is the maximum path length.
-     */
-    private static int[] toStringInfo(Node n) {
-        if (isLeaf()) {
-            int[] out = new int[2];
-            out[0] = n.getData().toString().length();
-            out[1] = 0;
-            return out;
-        } else {
-            int[] left  = toStringInfo(n.getLeft());
-            int[] right = toStringInfo(n.getRight());
-            int[] out;
-
-            if (left[0] > right[0])
-                out = left;
-            else
-                out = right;
-            // now out has highest first element
-            // so we need to fix the second
-            
-            if (left[1] > right[1])
-                out[1] = left[1];
-            else
-                out[1] = right[1];
-
-            return out;
-        }
+        return root.toString();
     }
 
     public static void main(String[] args) {
         BinaryTree<Integer> b = new BinaryTree<Integer>();
-        b.insert(20);
-        b.insert(10);
-        b.insert(15);
+        Random r = new Random();
+        for (int i = 0; i < 15; i++) {
+            b.insert(r.nextInt(50));
+        }
+        System.out.println(b);
     }
 }
 
@@ -133,4 +96,22 @@ class Node<E> {
         return right == null && left == null;
     }
 
+    public String toString() {
+        String out = "(";
+        out += catchNull(data);
+        out += " left: ";
+        out += catchNull(left);
+        out += " right:";
+        out += catchNull(right);
+        out += ")";
+        return out;
+    }
+
+    private String catchNull(Object o) {
+        if (o == null) {
+            return "null";
+        } else {
+            return o.toString();
+        }
+    }
 }
