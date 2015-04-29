@@ -11,18 +11,27 @@ public class BinaryTree<E extends Comparable<E>> {
         root = new Node<E>(data);
     }
 
-    public E search(E data) {
-        Node<E> tmp = root;
-        while (tmp != null) {
-            int c = tmp.getData().compareTo(data);
+    private Node<E>[] findNode(E data) {
+        Node<E>[] out = {null, root};
+        while (n != null) {
+            out[0] = out[1];
+            int c = out[1].getData().compareTo(data);
             if (c > 0)
-                tmp = tmp.getLeft();
+                out[1] = out[1].getLeft();
             else if (c < 0)
-                tmp = tmp.getRight();
-            else
-                return tmp.getData();
+                out[1] = out[1].getRight();
+            else {
+                return out;
+            }
         }
-        return null;
+        out[1] = null;
+        return out;
+    }
+
+    public E search(E data) { 
+        Node<E> n =  findNode(data)[1];
+        if (n == null) return null;
+        else return n.getData();
     }
 
     public void insert(E data) {
@@ -47,6 +56,25 @@ public class BinaryTree<E extends Comparable<E>> {
                 tmp.setLeft(newNode);
 
         }
+    }
+
+    public E remove(Node<E> n) {
+        E nodeData = n.getData();
+        if (n.isLeaf()) {
+
+        } else if (n.getRight() == null) {
+        } else if (n.getLeft()  == null) {
+        } else {
+            Node<E> l = n.getLeft();
+            while (l.getRight() != null) {
+                l = l.getRight();
+            }
+            remove(l);
+        }
+    }
+
+    private static void swap(Node original, Node replacement) {
+       original 
     }
 
     public String toString() {
