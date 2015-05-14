@@ -48,4 +48,6 @@ public class Heap<E implements Comparable<E>> {
 
     private int leftChild(int i)  { return 2*n + 1; }
     private int rightChild(int i) { return 2*n + 2; }
+
+    public String toString() { return a.toString(); }
 }
